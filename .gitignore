@@ -1,1 +1,2 @@
-API
+# Ignore environment variable files
+API.env
