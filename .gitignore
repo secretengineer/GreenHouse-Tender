@@ -1,2 +1,5 @@
 # Ignore environment variable files
 API.env
+
+# Ignore Python cache files
+__pycache__/
