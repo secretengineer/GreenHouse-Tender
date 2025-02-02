@@ -1,37 +1,59 @@
-
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Weather Information</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 20px;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    background-color: #f9f9f9;
-                }
-                h1 {
-                    color: #333;
-                }
-            </style>
-        </head>
-        <body>
-            <h1>Weather Information</h1>
-            <div id="weather-data">
-                <pre>Weather in Glendale:
-Temperature: 67.33&deg;F
-Feels Like: 64.62&deg;F
-Minimum Temperature: 66.27&deg;F
-Maximum Temperature: 68.94&deg;F
-Condition: Broken clouds
-Humidity: 18%
-Wind Speed: 7.2 m/s
-</pre>
-            </div>
-        </body>
-        </html>
-        
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            color: #ffcc00;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Information</h1>
+        <div id="weather-data">
+            <ul>
+                <li>Weather in Glendale:</li>
+                <li>Temperature: 67.33&deg;F</li>
+                <li>Feels Like: 64.62&deg;F</li>
+                <li>Minimum Temperature: 66.27&deg;F</li>
+                <li>Maximum Temperature: 68.94&deg;F</li>
+                <li>Condition: Broken clouds</li>
+                <li>Humidity: 18%</li>
+                <li>Wind Speed: 7.2 m/s</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
