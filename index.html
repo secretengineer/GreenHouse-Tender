@@ -1,46 +1,59 @@
-
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Mayfair Greenhouse Weather</title>
-            <style>
-                body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    background: #1a1a1a;
-                    color: #fff;
-                }
-                .container {
-                    background-color: #333;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                    text-align: center;
-                    border: 2px solid #4CAF50;
-                }
-                h1 {
-                    margin-bottom: 20px;
-                    font-size: 2.5em;
-                }
-                pre {
-                    text-align: left;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Mayfair Greenhouse Weather</h1>
-                <div id="weather-data">
-                    <pre>Weather in Glendale:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mayfair Greenhouse Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border: 2px solid #4CAF50;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: #4CAF50;
+        }
+        pre {
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="container">
+            <h1>Mayfair Greenhouse Weather</h1>
+            <div id="weather-data">
+                <pre>Weather in Glendale:
 Temperature: 14.45&deg;F
 Feels Like: 1.85&deg;F
 Minimum Temperature: 12.27&deg;F
@@ -49,8 +62,64 @@ Condition: Mist
 Humidity: 79%
 Wind Speed: 5.66 m/s
 </pre>
-                </div>
             </div>
-        </body>
-        </html>
-        
+        </div>
+
+        <div class="container">
+            <h2>Soil Temperature</h2>
+            <div id="soil-temperature">
+                <pre>Soil Temperature: 55.4&deg;F</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Humidity</h2>
+            <div id="humidity">
+                <pre>Humidity: 60%</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Fan Speed</h2>
+            <div id="fan-speed">
+                <pre>Fan Speed: 1200 RPM</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Interior Air Temperature</h2>
+            <div id="interior-air-temperature">
+                <pre>Interior Air Temperature: 72.5&deg;F</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Vent Status</h2>
+            <div id="vent-status">
+                <pre>Vent Status: Open</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Water System</h2>
+            <div id="water-system">
+                <pre>Water System: Active</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Soil PH</h2>
+            <div id="soil-ph">
+                <pre>Soil PH: 6.8</pre>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Notifications</h2>
+            <div id="notifications">
+                <pre>No new notifications</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
