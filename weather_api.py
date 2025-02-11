@@ -12,7 +12,7 @@ api_key = os.getenv("API_KEY")
 if api_key is None:
     print("Error: API_KEY is not defined.")
 else:
-    print(f"Loaded API Key: {api_key}")
+    print("API Key loaded successfully.")  # Removed actual API key from being printed
 
 def get_weather(lat, lon, api_key):
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
@@ -23,7 +23,7 @@ def get_weather(lat, lon, api_key):
     except ValueError:
         return {"error": "Invalid JSON response"}
     if response.status_code == 200 and 'main' in response_data:
-        return response.json()
+        return response_data
     else:
         return {"error": "Unable to fetch data"}
 
@@ -46,28 +46,45 @@ if __name__ == "__main__":
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Weather Information</title>
+            <title>Mayfair Greenhouse Weather</title>
             <style>
                 body {{
-                    font-family: Arial, sans-serif;
-                    margin: 20px;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background: #1a1a1a;
+                    color: #fff;
+                }}
+                .container {{
+                    background-color: #333;
                     padding: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    background-color: #f9f9f9;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                    border: 2px solid #4CAF50;
                 }}
                 h1 {{
-                    color: #333;
+                    margin-bottom: 20px;
+                    font-size: 2.5em;
+                }}
+                pre {{
+                    text-align: left;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
                 }}
             </style>
         </head>
         <body>
-            <h1>Weather Information</h1>
-            <div id="weather-data">
-                <pre>{format_weather_data(weather_data)}</pre>
+            <div class="container">
+                <h1>Mayfair Greenhouse Weather</h1>
+                <div id="weather-data">
+                    <pre>{format_weather_data(weather_data)}</pre>
+                </div>
             </div>
         </body>
         </html>
         """)
-    weather_data = get_weather(latitude, longitude, api_key)
-    print(weather_data)
