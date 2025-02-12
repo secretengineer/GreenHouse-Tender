@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from format_weather import format_weather_data
 
 # Load environment variables from .env file
 load_dotenv('API.env')
@@ -29,62 +30,27 @@ def get_weather(lat, lon, api_key):
 
 if __name__ == "__main__":
     # Latitude and longitude for Mayfair Greenhouse
-    latitude = 39.7373324  # Mayfair Greenhouse latitude
-    longitude = -104.9136498  # Mayfair Greenhouse longitude
+    latitude = 39.73915000  # Mayfair Greenhouse latitude
+    longitude = -104.98470000  # Mayfair Greenhouse longitude
 
     weather_data = get_weather(latitude, longitude, api_key)
     print("Preparing to write formatted output to index.html")  # Debugging line
     print(f"Weather Data: {weather_data}")  # Debugging line
 
-    from format_weather import format_weather_data
+    formatted_weather_data = format_weather_data(weather_data)
 
-    print("Writing formatted output to index.html")  # Debugging line
+    # Read the existing index.html file
+    with open('index.html', 'r') as html_file:
+        html_content = html_file.read()
+
+    # Replace the placeholder content with the formatted weather data
+    updated_html_content = html_content.replace(
+        '<div id="weather-data"></div>',
+        f'<div id="weather-data"><pre>{formatted_weather_data}</pre></div>'
+    )
+
+    # Write the updated content back to the index.html file
     with open('index.html', 'w') as html_file:
-        html_file.write(f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Mayfair Greenhouse Weather</title>
-            <style>
-                body {{
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    background: #1a1a1a;
-                    color: #fff;
-                }}
-                .container {{
-                    background-color: #333;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                    text-align: center;
-                    border: 2px solid #4CAF50;
-                }}
-                h1 {{
-                    margin-bottom: 20px;
-                    font-size: 2.5em;
-                }}
-                pre {{
-                    text-align: left;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Mayfair Greenhouse Weather</h1>
-                <div id="weather-data">
-                    <pre>{format_weather_data(weather_data)}</pre>
-                </div>
-            </div>
-        </body>
-        </html>
-        """)
+        html_file.write(updated_html_content)
+
+    print("Formatted output written to index.html")  # Debugging line

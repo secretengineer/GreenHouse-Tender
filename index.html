@@ -13,9 +13,28 @@
             background: #1a1a1a;
             color: #fff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .header .time {
+            font-size: 1.2em;
+            flex: 1;
+            text-align: left;
+        }
+        .header .last-updated {
+            font-size: 1.2em;
+            flex: 1;
+            text-align: right;
         }
         .grid-container {
             display: grid;
@@ -106,21 +125,23 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="time" id="current-time"></div>
+        <div class="last-updated" id="last-updated"></div>
+    </div>
     <div class="grid-container">
         <div class="container weather">
             <i class="fa fa-cloud-sun"></i>
             <h2>Mayfair Greenhouse Weather</h2>
-            <div id="weather-data">
-                <pre>Weather in Glendale:
-Temperature: 14.45&deg;F
-Feels Like: 1.85&deg;F
-Minimum Temperature: 12.27&deg;F
-Maximum Temperature: 14.95&deg;F
-Condition: Mist
-Humidity: 79%
-Wind Speed: 5.66 m/s
-</pre>
-            </div>
+            <div id="weather-data"><pre>Weather in Denver:
+Temperature: 12.96&deg;F
+Feels Like: 6.08&deg;F
+Minimum Temperature: 10.58&deg;F
+Maximum Temperature: 15.12&deg;F
+Condition: Overcast clouds
+Humidity: 77%
+Wind Speed: 1.79 m/s
+</pre></div>
         </div>
 
         <div class="container soil-temperature">
@@ -187,5 +208,26 @@ Wind Speed: 5.66 m/s
             </div>
         </div>
     </div>
+    <script>
+        // Function to update the current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('current-time').textContent = `Current Time: ${timeString}`;
+        }
+
+        // Function to set the last updated time
+        function setLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('last-updated').textContent = `Last Updated: ${timeString}`;
+        }
+
+        // Update the current time every second
+        setInterval(updateTime, 1000);
+
+        // Set the last updated time when the page loads
+        setLastUpdated();
+    </script>
 </body>
 </html>
