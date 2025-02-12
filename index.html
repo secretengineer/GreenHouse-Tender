@@ -30,7 +30,6 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            border: 2px solid #4CAF50;
         }
         h1 {
             margin-bottom: 20px;
@@ -39,19 +38,72 @@
         h2 {
             margin-bottom: 10px;
             font-size: 1.5em;
-            color: #4CAF50;
         }
         pre {
             text-align: left;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+        .weather {
+            border: 4px solid #4CAF50; /* Green */
+        }
+        .weather h2 {
+            color: #4CAF50;
+        }
+        .soil-temperature {
+            border: 4px solid #FF5722; /* Deep Orange */
+        }
+        .soil-temperature h2 {
+            color: #FF5722;
+        }
+        .humidity {
+            border: 4px solid #03A9F4; /* Light Blue */
+        }
+        .humidity h2 {
+            color: #03A9F4;
+        }
+        .fan-speed {
+            border: 4px solid #9C27B0; /* Purple */
+        }
+        .fan-speed h2 {
+            color: #9C27B0;
+        }
+        .interior-air-temperature {
+            border: 4px solid #FFC107; /* Amber */
+        }
+        .interior-air-temperature h2 {
+            color: #FFC107;
+        }
+        .vent-status {
+            border: 4px solid #8BC34A; /* Light Green */
+        }
+        .vent-status h2 {
+            color: #8BC34A;
+        }
+        .water-system {
+            border: 4px solid #00BCD4; /* Cyan */
+        }
+        .water-system h2 {
+            color: #00BCD4;
+        }
+        .soil-ph {
+            border: 4px solid #E91E63; /* Pink */
+        }
+        .soil-ph h2 {
+            color: #E91E63;
+        }
+        .notifications {
+            border: 4px solid #FFEB3B; /* Yellow */
+        }
+        .notifications h2 {
+            color: #FFEB3B;
+        }
     </style>
 </head>
 <body>
     <div class="grid-container">
-        <div class="container">
-            <h1>Mayfair Greenhouse Weather</h1>
+        <div class="container weather">
+            <h2>Mayfair Greenhouse Weather</h2>
             <div id="weather-data">
                 <pre>Weather in Glendale:
 Temperature: 14.45&deg;F
@@ -65,56 +117,56 @@ Wind Speed: 5.66 m/s
             </div>
         </div>
 
-        <div class="container">
+        <div class="container soil-temperature">
             <h2>Soil Temperature</h2>
             <div id="soil-temperature">
                 <pre>Soil Temperature: 55.4&deg;F</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container humidity">
             <h2>Humidity</h2>
             <div id="humidity">
                 <pre>Humidity: 60%</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container fan-speed">
             <h2>Fan Speed</h2>
             <div id="fan-speed">
                 <pre>Fan Speed: 1200 RPM</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container interior-air-temperature">
             <h2>Interior Air Temperature</h2>
             <div id="interior-air-temperature">
                 <pre>Interior Air Temperature: 72.5&deg;F</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container vent-status">
             <h2>Vent Status</h2>
             <div id="vent-status">
                 <pre>Vent Status: Open</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container water-system">
             <h2>Water System</h2>
             <div id="water-system">
                 <pre>Water System: Active</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container soil-ph">
             <h2>Soil PH</h2>
             <div id="soil-ph">
                 <pre>Soil PH: 6.8</pre>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container notifications">
             <h2>Notifications</h2>
             <div id="notifications">
                 <pre>No new notifications</pre>
