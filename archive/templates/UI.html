@@ -1,0 +1,61 @@
+<!-- In the weather container div -->
+<div class="container weather">
+    <i class="fa fa-cloud-sun"></i>
+    <h2>Local Weather</h2>
+    <div id="weather-data">
+        <ul id="weather-list" class="weather-list">
+            <!-- Weather data will be inserted here -->
+        </ul>
+    </div>
+</div>
+
+<!-- Add this CSS to your existing styles -->
+<style>
+    .weather-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+    }
+    .weather-list li {
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .weather-list li:last-child {
+        border-bottom: none;
+    }
+</style>
+
+<!-- Update the JavaScript updateWeatherData function -->
+<script>
+    async function updateWeatherData() {
+        try {
+            const response = await fetch('http://localhost:5000/weather');
+            const data = await response.json();
+            const weatherList = document.getElementById('weather-list');
+            
+            if (data.weather) {
+                const lines = data.weather.split('\n').filter(line => line.trim());
+                weatherList.innerHTML = lines
+                    .map(line => `<li>${line}</li>`)
+                    .join('');
+                console.log('Weather data updated successfully');
+            } else {
+                console.error('No weather data in response');
+                weatherList.innerHTML = '<li>Unable to fetch weather data</li>';
+            }
+            
+            setLastUpdated();
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+            document.getElementById('weather-list').innerHTML = 
+                '<li>Error fetching weather data</li>';
+        }
+    }
+
+    // Initial fetch when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        updateWeatherData();
+        setInterval(updateWeatherData, 60000); // Update every minute
+    });
+</script>

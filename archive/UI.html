@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenhouse Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .header .time {
+            font-size: 1.2em;
+            flex: 1;
+            text-align: left;
+        }
+        .header .last-updated {
+            font-size: 1.2em;
+            flex: 1;
+            text-align: right;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .fa {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .settings-menu, .add-sensor-menu {
+            grid-column: span 2;
+        }
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .settings-menu, .add-sensor-menu {
+                grid-column: span 1;
+            }
+        }
+        .weather h2, .weather .fa {
+            color: #4CAF50;
+        }
+        .internal-temperature h2, .internal-temperature .fa {
+            color: #FF5722;
+        }
+        .humidity h2, .humidity .fa {
+            color: #03A9F4;
+        }
+        .co2-level h2, .co2-level .fa {
+            color: #9C27B0;
+        }
+        .soil-temperature h2, .soil-temperature .fa {
+            color: #FFC107;
+        }
+        .soil-humidity h2, .soil-humidity .fa {
+            color: #8BC34A;
+        }
+        .soil-ph h2, .soil-ph .fa {
+            color: #E91E63;
+        }
+        .fan-speed h2, .fan-speed .fa {
+            color: #00BCD4;
+        }
+        .vent-status h2, .vent-status .fa {
+            color: #3F51B5;
+        }
+        .light-level h2, .light-level .fa {
+            color: #FFEB3B;
+        }
+        .wifi-signal h2, .wifi-signal .fa {
+            color: #795548;
+        }
+        .heater-status h2, .heater-status .fa {
+            color: #FF9800;
+        }
+        .current-draw h2, .current-draw .fa {
+            color: #607D8B;
+        }
+        .aux-heater-status h2, .aux-heater-status .fa {
+            color: #F44336;
+        }
+        .settings-menu h2, .settings-menu .fa {
+            color: #9E9E9E;
+        }
+        .add-sensor-menu h2, .add-sensor-menu .fa {
+            color: #673AB7;
+        }
+        .backup-power-status h2, .backup-power-status .fa {
+            color: #2196F3;
+        }
+        .solar-panel h2, .solar-panel .fa {
+            color: #CDDC39;
+        }
+        .water-valve-status h2, .water-valve-status .fa {
+            color: #009688;
+        }
+        .water-timer-settings h2, .water-timer-settings .fa {
+            color: #FF4081;
+        }
+        .weather {
+            border: 4px solid #4CAF50; /* Green */
+        }
+        .internal-temperature {
+            border: 4px solid #FF5722; /* Deep Orange */
+        }
+        .humidity {
+            border: 4px solid #03A9F4; /* Light Blue */
+        }
+        .co2-level {
+            border: 4px solid #9C27B0; /* Purple */
+        }
+        .soil-temperature {
+            border: 4px solid #FFC107; /* Amber */
+        }
+        .soil-humidity {
+            border: 4px solid #8BC34A; /* Light Green */
+        }
+        .soil-ph {
+            border: 4px solid #E91E63; /* Pink */
+        }
+        .fan-speed {
+            border: 4px solid #00BCD4; /* Cyan */
+        }
+        .vent-status {
+            border: 4px solid #3F51B5; /* Indigo */
+        }
+        .light-level {
+            border: 4px solid #FFEB3B; /* Yellow */
+        }
+        .wifi-signal {
+            border: 4px solid #795548; /* Brown */
+        }
+        .heater-status {
+            border: 4px solid #FF9800; /* Orange */
+        }
+        .current-draw {
+            border: 4px solid #607D8B; /* Blue Grey */
+        }
+        .aux-heater-status {
+            border: 4px solid #F44336; /* Red */
+        }
+        .settings-menu {
+            border: 4px solid #9E9E9E; /* Grey */
+        }
+        .add-sensor-menu {
+            border: 4px solid #673AB7; /* Deep Purple */
+        }
+        .backup-power-status {
+            border: 4px solid #2196F3; /* Blue */
+        }
+        .solar-panel {
+            border: 4px solid #CDDC39; /* Lime */
+        }
+        .water-valve-status {
+            border: 4px solid #009688; /* Teal */
+        }
+        .water-timer-settings {
+            border: 4px solid #FF4081; /* Pink Accent */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="time" id="current-time"></div>
+        <div class="last-updated" id="last-updated"></div>
+    </div>
+    <div class="grid-container">
+        <div class="container weather">
+            <i class="fa fa-cloud-sun"></i>
+            <h2>Local Weather</h2>
+            <div id="weather-data"></div>
+        </div>
+        <div class="container internal-temperature">
+            <i class="fa fa-thermometer-half"></i>
+            <h2>Internal Temperature</h2>
+            <div id="internal-temperature"></div>
+        </div>
+        <div class="container humidity">
+            <i class="fa fa-tint"></i>
+            <h2>Humidity</h2>
+            <div id="humidity"></div>
+        </div>
+        <div class="container co2-level">
+            <i class="fa fa-cloud"></i>
+            <h2>CO2 Level</h2>
+            <div id="co2-level"></div>
+        </div>
+        <div class="container soil-temperature">
+            <i class="fa fa-thermometer-half"></i>
+            <h2>Soil Temperature</h2>
+            <div id="soil-temperature"></div>
+        </div>
+        <div class="container soil-humidity">
+            <i class="fa fa-tint"></i>
+            <h2>Soil Humidity</h2>
+            <div id="soil-humidity"></div>
+        </div>
+        <div class="container soil-ph">
+            <i class="fa fa-leaf"></i>
+            <h2>Soil PH</h2>
+            <div id="soil-ph"></div>
+        </div>
+        <div class="container fan-speed">
+            <i class="fa fa-fan"></i>
+            <h2>Fan Speed</h2>
+            <div id="fan-speed"></div>
+        </div>
+        <div class="container vent-status">
+            <i class="fa fa-wind"></i>
+            <h2>Vent Status</h2>
+            <div id="vent-status"></div>
+        </div>
+        <div class="container light-level">
+            <i class="fa fa-lightbulb"></i>
+            <h2>Light Level</h2>
+            <div id="light-level"></div>
+        </div>
+        <div class="container wifi-signal">
+            <i class="fa fa-wifi"></i>
+            <h2>WiFi Signal Strength</h2>
+            <div id="wifi-signal"></div>
+        </div>
+        <div class="container heater-status">
+            <i class="fa fa-fire"></i>
+            <h2>Heater Status</h2>
+            <div id="heater-status"></div>
+        </div>
+        <div class="container current-draw">
+            <i class="fa fa-bolt"></i>
+            <h2>Greenhouse Current Draw</h2>
+            <div id="current-draw"></div>
+        </div>
+        <div class="container aux-heater-status">
+            <i class="fa fa-fire-alt"></i>
+            <h2>Auxiliary Heater Status</h2>
+            <div id="aux-heater-status"></div>
+        </div>
+        <div class="container settings-menu">
+            <i class="fa fa-cogs"></i>
+            <h2>Settings Menu</h2>
+            <div id="settings-menu"></div>
+        </div>
+        <div class="container add-sensor-menu">
+            <i class="fa fa-plus-circle"></i>
+            <h2>Add Sensor Menu</h2>
+            <div id="add-sensor-menu"></div>
+        </div>
+        <div class="container backup-power-status">
+            <i class="fa fa-battery-full"></i>
+            <h2>Backup Power Status</h2>
+            <div id="backup-power-status"></div>
+        </div>
+        <div class="container solar-panel">
+            <i class="fa fa-solar-panel"></i>
+            <h2>Solar Panel Voltage & Current</h2>
+            <div id="solar-panel"></div>
+        </div>
+        <div class="container water-valve-status">
+            <i class="fa fa-water"></i>
+            <h2>Water Valve Status</h2>
+            <div id="water-valve-status"></div>
+        </div>
+        <div class="container water-timer-settings">
+            <i class="fa fa-clock"></i>
+            <h2>Water Timer Settings</h2>
+            <div id="water-timer-settings"></div>
+        </div>
+    </div>
+    <script>
+        // Function to update the current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('current-time').textContent = `Current Time: ${timeString}`;
+        }
+
+        // Function to set the last updated time
+        function setLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('last-updated').textContent = `Last Updated: ${timeString}`;
+        }
+
+        // Function to fetch and update weather data
+        async function updateWeatherData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/weather');
+                const data = await response.json();
+                document.getElementById('weather-data').innerHTML = `<pre>${data.weather}</pre>`;
+                setLastUpdated();
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        // Update the current time every second
+        setInterval(updateTime, 1000);
+
+        // Fetch and update weather data every minute
+        setInterval(updateWeatherData, 60000);
+
+        // Initial fetch and update of weather data
+        updateWeatherData();
+    </script>
+</body>
+</html>

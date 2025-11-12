@@ -2,88 +2,69 @@ import os
 import requests
 from dotenv import load_dotenv
 from format_weather import format_weather_data
-import time
+import logging
 
-# Load environment variables from .env file
+# Configure logging for library usage
+logging.basicConfig(level=logging.INFO)
+
+# Load environment variables from .env file (only if available)
 load_dotenv('API.env')
 
-# Retrieve API key from environment variables
-api_key = os.getenv("API_KEY")
+# Retrieve API key from environment variables if caller doesn't provide one
+DEFAULT_API_KEY = os.getenv("API_KEY")
 
-# Debugging line to check if API key is loaded correctly
-if api_key is None:
-    print("Error: API_KEY is not defined.")
-else:
-    print("API Key loaded successfully.")  # Removed actual API key from being printed
 
-def get_weather(lat, lon, api_key):
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
-    response = requests.get(url)
-    
+def get_weather(lat, lon, api_key=None, timeout=10):
+    """Fetch weather from OpenWeatherMap and return parsed JSON or error dict.
+
+    Args:
+        lat (float): latitude
+        lon (float): longitude
+        api_key (str|None): OpenWeatherMap API key; if None, DEFAULT_API_KEY is used
+        timeout (int): request timeout in seconds
+
+    Returns:
+        dict: parsed JSON on success or {'error': 'message'} on failure
+    """
+    key = api_key or DEFAULT_API_KEY
+    if not key:
+        logging.error('No API key provided for get_weather')
+        return {"error": "API key not configured"}
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}"
+    try:
+        response = requests.get(url, timeout=timeout)
+    except requests.RequestException as exc:
+        logging.exception('HTTP request to weather API failed')
+        return {"error": str(exc)}
+
     try:
         response_data = response.json()
     except ValueError:
+        logging.error("Invalid JSON response from weather API")
         return {"error": "Invalid JSON response"}
+
     if response.status_code == 200 and 'main' in response_data:
         return response_data
     else:
-        return {"error": "Unable to fetch data"}
+        logging.error("Unable to fetch data, status=%s, body=%s", response.status_code, response_data)
+        return {"error": response_data.get('message', 'Unable to fetch data')}
+
+
+def get_formatted_weather(lat, lon, api_key=None):
+    """Convenience wrapper: fetch and format weather text for display."""
+    raw = get_weather(lat, lon, api_key)
+    return format_weather_data(raw)
+
 
 if __name__ == "__main__":
-    # Latitude and longitude for Mayfair Greenhouse
-    latitude = 39.73915000  # Mayfair Greenhouse latitude
-    longitude = -104.98470000  # Mayfair Greenhouse longitude
+    # Simple CLI for manual runs; prints formatted weather to stdout.
+    import argparse
 
-    weather_data = get_weather(latitude, longitude, api_key)
-    print("Preparing to write formatted output to index.html")  # Debugging line
-    print(f"Weather Data: {weather_data}")  # Debugging line
+    parser = argparse.ArgumentParser(description='Fetch and print formatted weather')
+    parser.add_argument('--lat', type=float, default=39.73915)
+    parser.add_argument('--lon', type=float, default=-104.9847)
+    parser.add_argument('--api-key', type=str, default=None)
+    args = parser.parse_args()
 
-    formatted_weather_data = format_weather_data(weather_data)
-    print(f"Formatted Weather Data: {formatted_weather_data}")  # Debugging line
-
-    # Read the existing index.html file
-    with open('index.html', 'r') as html_file:
-        html_content = html_file.read()
-
-    # Try to update only the weather section so we don't overwrite CSS/visual design.
-    # 1) If there's a <div id="weather-data">...</div>, replace only its inner HTML.
-    # 2) Otherwise, look for a heading that contains 'Mayfair Greenhouse Weather' and insert
-    #    the weather block right after that heading.
-    # 3) Fallback: insert before </body> or append.
-    import re
-
-    weather_block = f'<div id="weather-data"><pre>{formatted_weather_data}</pre></div>'
-
-    # 1) Replace inner HTML of existing #weather-data (preserve attributes)
-    pattern = re.compile(r'(<div[^>]+id=["\']weather-data["\'][^>]*>)(.*?)(</div>)', re.IGNORECASE | re.DOTALL)
-    m = pattern.search(html_content)
-    if m:
-        print('Found existing #weather-data element — replacing its inner content')
-        updated_html_content = html_content[:m.start(2)] + f'<pre>{formatted_weather_data}</pre>' + html_content[m.end(2):]
-    else:
-        # 2) Look for a heading mentioning Mayfair Greenhouse Weather (h1-h3)
-        heading_pattern = re.compile(r'(<h[1-3][^>]*>\s*(?:Mayfair\s+Greenhouse\s+Weather)\s*</h[1-3]>)', re.IGNORECASE)
-        hm = heading_pattern.search(html_content)
-        if hm:
-            print('Found heading "Mayfair Greenhouse Weather" — inserting weather block after it')
-            insert_point = hm.end(1)
-            updated_html_content = html_content[:insert_point] + '\n    ' + weather_block + html_content[insert_point:]
-        else:
-            # 3) Fallback: try to insert before </body>, otherwise append to the end
-            print("Placeholder/heading not found in index.html, using fallback insertion")
-            insert_point = html_content.rfind('</body>')
-            if insert_point != -1:
-                updated_html_content = (
-                    html_content[:insert_point]
-                    + f'\n    {weather_block}\n'
-                    + html_content[insert_point:]
-                )
-            else:
-                # As a last resort append to the file (preserves existing content)
-                updated_html_content = html_content + f'\n{weather_block}\n'
-
-    # Write the updated content back to the index.html file
-    with open('index.html', 'w') as html_file:
-        html_file.write(updated_html_content)
-
-    print("Formatted output written to index.html")  # Debugging line
+    print(get_formatted_weather(args.lat, args.lon, args.api_key))

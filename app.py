@@ -32,7 +32,8 @@ def weather():
         return jsonify({'error': data.get('error')}), 502
 
     formatted = format_weather_data(data)
-    timestamp = time.time()
+    # return integer epoch seconds so the client can reliably construct a Date
+    timestamp = int(time.time())
     return jsonify({'formatted': formatted, 'raw': data, 'timestamp': timestamp})
 
 

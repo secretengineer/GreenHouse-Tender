@@ -122,34 +122,6 @@
             font-size: 2em;
             margin-bottom: 10px;
         }
-        /* Refresh button styles and animation */
-        .refresh-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(180deg,#2e7d32,#1b5e20);
-            color: #ffffff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: transform 150ms ease, opacity 150ms ease;
-        }
-        .refresh-btn:disabled {
-            opacity: 0.6;
-            cursor: default;
-        }
-        .refresh-btn .fa {
-            transition: transform 300ms linear;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .refresh-btn.loading .fa {
-            animation: spin 0.8s linear infinite;
-        }
     </style>
 </head>
 <body>
@@ -161,7 +133,7 @@
         <div class="container weather">
             <i class="fa fa-cloud-sun"></i>
             <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-                <h2 style="margin:0;">Mayfair Weather</h2>
+                <h2 style="margin:0;">Mayfair Greenhouse Weather</h2>
                 <button id="refresh-weather" class="refresh-btn" title="Refresh weather now">
                     <i class="fa fa-sync"></i>
                     <span style="margin-left:6px;">Refresh</span>
@@ -268,34 +240,27 @@ Wind Speed: 1.34 m/s
 
         // Fetch weather from the Flask server and update only the weather section
         async function refreshWeather() {
-                const btn = document.getElementById('refresh-weather');
-                try {
-                    if (btn) { btn.disabled = true; btn.classList.add('loading'); btn.setAttribute('aria-busy','true'); }
-
-                    const res = await fetch('/weather', { cache: 'no-store' });
-                    if (!res.ok) {
-                        console.error('Failed to fetch /weather', res.status);
-                        document.getElementById('weather-data').innerHTML = `<pre>Error fetching weather: ${res.status}</pre>`;
-                        return;
-                    }
-                    const data = await res.json();
-                    if (data.error) {
-                        document.getElementById('weather-data').innerHTML = `<pre>Error: ${data.error}</pre>`;
-                        return;
-                    }
-
-                    // Insert the formatted content (server returns safe HTML-like string)
-                    const formatted = data.formatted || '';
-                    document.getElementById('weather-data').innerHTML = `<pre>${formatted}</pre>`;
-
-                    // Update last-updated using server timestamp if provided
-                    if (data.timestamp) setLastUpdated(data.timestamp);
-                } catch (err) {
-                    console.error('Error fetching weather:', err);
-                    document.getElementById('weather-data').innerHTML = `<pre>Error loading weather: ${String(err)}</pre>`;
-                } finally {
-                    if (btn) { btn.disabled = false; btn.classList.remove('loading'); btn.removeAttribute('aria-busy'); }
+            try {
+                const res = await fetch('/weather');
+                if (!res.ok) {
+                    console.error('Failed to fetch /weather', res.status);
+                    return;
                 }
+                const data = await res.json();
+                if (data.error) {
+                    document.getElementById('weather-data').innerHTML = `<pre>Error: ${data.error}</pre>`;
+                    return;
+                }
+
+                // Insert the formatted content (server returns safe HTML-like string)
+                const formatted = data.formatted || '';
+                document.getElementById('weather-data').innerHTML = `<pre>${formatted}</pre>`;
+
+                // Update last-updated using server timestamp if provided
+                if (data.timestamp) setLastUpdated(data.timestamp);
+            } catch (err) {
+                console.error('Error fetching weather:', err);
+            }
         }
 
         // Initial UI updates and weather fetch
