@@ -132,14 +132,20 @@
     <div class="grid-container">
         <div class="container weather">
             <i class="fa fa-cloud-sun"></i>
-            <h2>Mayfair Greenhouse Weather</h2>
+            <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+                <h2 style="margin:0;">Mayfair Greenhouse Weather</h2>
+                <button id="refresh-weather" class="refresh-btn" title="Refresh weather now">
+                    <i class="fa fa-sync"></i>
+                    <span style="margin-left:6px;">Refresh</span>
+                </button>
+            </div>
             <div id="weather-data"><pre>Weather in Denver:
-Temperature: 12.36&deg;F
-Feels Like: 7.11&deg;F
-Minimum Temperature: 10.24&deg;F
-Maximum Temperature: 14.43&deg;F
+Temperature: 65.57&deg;F
+Feels Like: 62.91&deg;F
+Minimum Temperature: 63.45&deg;F
+Maximum Temperature: 68.92&deg;F
 Condition: Overcast clouds
-Humidity: 80%
+Humidity: 23%
 Wind Speed: 1.34 m/s
 </pre></div> <!-- Ensure this placeholder exists -->
         </div>
@@ -216,18 +222,55 @@ Wind Speed: 1.34 m/s
             document.getElementById('current-time').textContent = `Current Time: ${timeString}`;
         }
 
-        // Function to set the last updated time
-        function setLastUpdated() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
+        // Function to set the last updated time (client-side fallback)
+        function setLastUpdated(ts) {
+            let timeString;
+            if (ts) {
+                const d = new Date(ts * 1000);
+                timeString = d.toLocaleString();
+            } else {
+                const now = new Date();
+                timeString = now.toLocaleTimeString();
+            }
             document.getElementById('last-updated').textContent = `Last Updated: ${timeString}`;
         }
 
         // Update the current time every second
         setInterval(updateTime, 1000);
 
-        // Set the last updated time when the page loads
-        setLastUpdated();
+        // Fetch weather from the Flask server and update only the weather section
+        async function refreshWeather() {
+            try {
+                const res = await fetch('/weather');
+                if (!res.ok) {
+                    console.error('Failed to fetch /weather', res.status);
+                    return;
+                }
+                const data = await res.json();
+                if (data.error) {
+                    document.getElementById('weather-data').innerHTML = `<pre>Error: ${data.error}</pre>`;
+                    return;
+                }
+
+                // Insert the formatted content (server returns safe HTML-like string)
+                const formatted = data.formatted || '';
+                document.getElementById('weather-data').innerHTML = `<pre>${formatted}</pre>`;
+
+                // Update last-updated using server timestamp if provided
+                if (data.timestamp) setLastUpdated(data.timestamp);
+            } catch (err) {
+                console.error('Error fetching weather:', err);
+            }
+        }
+
+        // Initial UI updates and weather fetch
+        window.addEventListener('load', () => {
+            updateTime();
+            setLastUpdated();
+            refreshWeather();
+            // Refresh weather every 5 minutes while page is open
+            setInterval(refreshWeather, 5 * 60 * 1000);
+        });
     </script>
 </body>
 </html>
