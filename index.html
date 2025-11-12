@@ -321,32 +321,3 @@ Wind Speed: 1.34 m/s
     </script>
 </body>
 </html>
-
-if __name__ == "__main__":
-    # Latitude and longitude for Mayfair Greenhouse
-    latitude = 39.7373324  # Mayfair Greenhouse latitude
-    longitude = -104.9136498  # Mayfair Greenhouse longitude
-
-    weather_data = get_weather(latitude, longitude, api_key)
-    print("Preparing to write formatted output to index.html")  # Debugging line
-    print(f"Weather Data: {weather_data}")  # Debugging line
-
-    formatted_weather_data = format_weather_data(weather_data)
-    print(f"Formatted Weather Data: {formatted_weather_data}")  # Debugging line
-
-    # Read the existing index.html file
-    with open('index.html', 'r') as html_file:
-        html_content = html_file.read()
-    print("Read index.html file")  # Debugging line
-
-    # Replace the placeholder content with the formatted weather data
-    updated_html_content = html_content.replace(
-        '<div id="weather-data"></div>',
-        f'<div id="weather-data"><pre>{formatted_weather_data}</pre></div>'
-    )
-    print("Replaced placeholder content")  # Debugging line
-
-    # Write the updated content back to the index.html file
-    with open('index.html', 'w') as html_file:
-        html_file.write(updated_html_content)
-    print("Formatted output written to index.html")  # Debugging line
