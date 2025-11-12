@@ -1,80 +1,409 @@
-# GreenHouse Tender
- Backyard greenhouse climate and soil monitor and interface.
+# 🌱 GreenHouse Tender
 
-This document outlines the development of a weather forecasting application that allows users to retrieve current weather information for any specified location. The application utilizes the OpenWeatherMap API to fetch real-time weather data based on the city name provided by the user. The implementation involves setting up an Admin interface to capture user input, sending an automated request to the OpenWeatherMap API with the specified city name, and displaying the retrieved weather information, such as temperature, humidity, and weather conditions, then using this data to inform a greenhouse climate monitoring application so that interior conditions will automatically be adjusted to maintain optimal climate conditions for plant growth.
+> A comprehensive real-time climate monitoring and control system for backyard greenhouse management
 
-**Implementation Plan for Real-Time Greenhouse Climate Control System:**
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-1. **System Overview:**
-   - Develop a system that monitors external weather conditions and internal greenhouse parameters to maintain optimal climate conditions for plant growth.
+---
 
-2. **Components:**
-   - **Sensors:**
-     - External Weather Data:
-       - Utilize the OpenWeatherMap API to gather real-time data on temperature, humidity, sunlight, wind speed, and precipitation for the greenhouse's location.
-     - **Internal Greenhouse Sensors:**
-       - Deploy sensors to monitor internal temperature, humidity, soil moisture, and light levels.
-   - **Actuators:**
-     - Control systems for heating, cooling, ventilation, irrigation, and lighting within the greenhouse.
+## 📋 Table of Contents
 
-3. **System Architecture:**
-   - **Data Acquisition:**
-     - Fetch external weather data periodically using the OpenWeatherMap API.
-     - Collect data from internal sensors at regular intervals.
-   - **Data Processing:**
-     - Analyze the collected data to assess current conditions.
-     - Compare real-time data against predefined optimal climate parameters for the specific crops being cultivated.
-   - **Decision-Making:**
-     - Implement control algorithms to determine necessary adjustments to maintain optimal conditions.
-   - **Actuation:**
-     - Send commands to actuators to adjust environmental controls such as heating, cooling, ventilation, irrigation, and lighting based on the analysis.
+- [Overview](#overview)
+- [Features](#features)
+- [System Architecture](#system-architecture)
+- [Technology Stack](#technology-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [Hardware Integration](#hardware-integration)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
 
-4. **Technology Stack:**
-   - **Programming Language:**
-     - Python:
-       - Utilize Python for its extensive libraries and ease of integration with hardware components.
-   - **APIs:**
-     - OpenWeatherMap API:
-       - Fetch real-time external weather data.
-   - **Hardware:**
-     - **Microcontroller:**
-       - Raspberry Pi or Arduino:
-         - Serve as the central unit for processing data and controlling actuators.
-     - **Sensors:**
-       - Temperature and Humidity Sensors (e.g., DHT22)
-       - Soil Moisture Sensors
-       - Light Sensors
-     - **Actuators:**
-       - Relays or motor controllers to manage heating, cooling, ventilation, irrigation, and lighting systems.
-   - **Data Storage:**
-     - SQLite or MySQL:
-       - Store historical data for analysis and system optimization.
-   - **User Interface:**
-     - Web-based Dashboard:
-       - Develop a dashboard using Flask (Python web framework) to monitor real-time data and system status.
+---
 
-5. **Implementation Steps:**
-   - **Setup:**
-     - Configure the microcontroller with the necessary software and libraries.
-   - **Sensor Integration:**
-     - Connect internal sensors to the microcontroller and develop code to read data from them.
-   - **API Integration:**
-     - Write scripts to fetch and parse data from the OpenWeatherMap API.
-   - **Data Processing:**
-     - Develop algorithms to analyze sensor and API data to determine necessary climate adjustments.
-   - **Actuator Control:**
-     - Implement control logic to operate actuators based on data analysis.
-   - **User Interface Development:**
-     - Create a web-based dashboard to display real-time data and system controls.
-   - **Testing and Calibration:**
-     - Test the system thoroughly and calibrate sensors and actuators to ensure accurate operation.
+## 🌟 Overview
 
-6. **Considerations:**
-   - **Reliability:**
-     - Ensure the system can handle data acquisition and processing in real-time.
-   - **Scalability:**
-     - Design the system to accommodate additional sensors or actuators if needed.
-   - **Security:**
-     - Implement security measures to protect the system from unauthorized access, especially for remote monitoring features.
+**GreenHouse Tender** is an intelligent climate monitoring and control system designed to maintain optimal growing conditions in backyard greenhouses. By integrating real-time external weather data from OpenWeatherMap with internal sensor readings, the system automatically adjusts environmental controls to optimize plant growth while maximizing resource efficiency.
 
-By leveraging real-time external weather data and internal greenhouse monitoring, this system aims to maintain optimal growing conditions, thereby enhancing crop yield and resource efficiency. 
+The application features a responsive web dashboard that displays:
+- Real-time local weather conditions
+- Internal greenhouse temperature and humidity
+- Soil temperature and pH levels
+- Ventilation and fan status
+- Water system controls
+- System notifications and alerts
+
+---
+
+## ✨ Features
+
+### Current Features
+- **Real-Time Weather Monitoring**: Integration with OpenWeatherMap API for location-specific weather data
+- **Responsive Dashboard**: Modern, mobile-friendly web interface with live data updates
+- **Manual Weather Refresh**: On-demand weather data updates via refresh button
+- **Sensor Data Display**: Visual representation of multiple greenhouse parameters
+- **Automatic Updates**: Weather data refreshes every 5 minutes
+- **RESTful API**: Flask-based backend for data management
+
+### Planned Features
+- **Automated Climate Control**: Integration with actuators for heating, cooling, and ventilation
+- **Sensor Integration**: Real-time data from DHT22, soil moisture, and light sensors
+- **Historical Data Analytics**: Track trends and optimize growing conditions
+- **Alert System**: Notifications for out-of-range conditions
+- **Mobile App**: Native iOS/Android applications
+
+---
+
+## 🏗️ System Architecture
+
+### Data Flow
+```
+External Weather (OpenWeatherMap API)
+          ↓
+    Flask Backend
+          ↓
+    Data Processing & Formatting
+          ↓
+    RESTful API Endpoint
+          ↓
+    Web Dashboard (JavaScript)
+          ↓
+    User Interface Display
+```
+
+### Components
+
+#### **Data Acquisition**
+- OpenWeatherMap API for external weather conditions
+- Internal sensor readings (temperature, humidity, soil metrics)
+- Periodic data collection at configurable intervals
+
+#### **Data Processing**
+- Real-time analysis of environmental conditions
+- Comparison against optimal climate parameters
+- Decision algorithms for automated control
+
+#### **User Interface**
+- Web-based dashboard built with HTML5, CSS3, and JavaScript
+- Real-time data visualization
+- Manual control interface for greenhouse systems
+
+#### **Hardware Control** (In Development)
+- Microcontroller integration (Raspberry Pi/Arduino)
+- Actuator control for heating, cooling, ventilation, and irrigation
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Python 3.8+**: Core programming language
+- **Flask 2.0+**: Web framework for API and server
+- **Requests**: HTTP library for API integration
+- **python-dotenv**: Environment variable management
+
+### Frontend
+- **HTML5**: Semantic markup
+- **CSS3**: Modern styling with responsive design
+- **JavaScript (ES6+)**: Dynamic functionality and AJAX requests
+- **Font Awesome**: Icon library
+
+### APIs & Services
+- **OpenWeatherMap API**: Real-time weather data
+
+### Hardware (Optional)
+- **Raspberry Pi / Arduino**: Microcontroller for sensor/actuator control
+- **DHT22**: Temperature and humidity sensors
+- **Soil Moisture Sensors**: Soil condition monitoring
+- **Relay Modules**: Actuator control
+
+---
+
+## 📦 Prerequisites
+
+Before installing GreenHouse Tender, ensure you have the following:
+
+- **Python 3.8 or higher** ([Download Python](https://www.python.org/downloads/))
+- **pip** (Python package manager, included with Python)
+- **OpenWeatherMap API Key** ([Get Free API Key](https://openweathermap.org/api))
+- **Git** (optional, for cloning the repository)
+
+---
+
+## 🚀 Installation
+
+### Method 1: Clone from GitHub
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/secretengineer/GreenHouse-Tender.git
+   cd GreenHouse-Tender
+   ```
+
+2. **Create a virtual environment** (recommended)
+   ```bash
+   # On Windows
+   python -m venv venv
+   venv\Scripts\activate
+
+   # On macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. **Install required dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Method 2: Download ZIP
+
+1. Download the repository as a ZIP file from GitHub
+2. Extract the ZIP file to your desired location
+3. Open a terminal/command prompt in the extracted folder
+4. Follow steps 2-3 from Method 1 above
+
+---
+
+## ⚙️ Configuration
+
+### 1. Set Up API Key
+
+Create a file named `API.env` in the root directory of the project:
+
+```bash
+# Windows PowerShell
+New-Item -Path . -Name "API.env" -ItemType "file"
+
+# macOS/Linux
+touch API.env
+```
+
+### 2. Add Your API Key
+
+Open `API.env` in a text editor and add your OpenWeatherMap API key:
+
+```env
+API_KEY=your_openweathermap_api_key_here
+```
+
+**Important**: Never commit your `API.env` file to version control. It should already be listed in `.gitignore`.
+
+### 3. Configure Location (Optional)
+
+To change the default greenhouse location, edit `app.py`:
+
+```python
+# Default: Denver, CO area
+LATITUDE = 39.73915
+LONGITUDE = -104.9847
+```
+
+Replace with your greenhouse's coordinates.
+
+---
+
+## 🎯 Running the Application
+
+### Start the Flask Server
+
+1. **Ensure your virtual environment is activated** (if using one)
+   ```bash
+   # Windows
+   venv\Scripts\activate
+
+   # macOS/Linux
+   source venv/bin/activate
+   ```
+
+2. **Run the application**
+   ```bash
+   python app.py
+   ```
+
+3. **Expected output**
+   ```
+   * Serving Flask app 'app'
+   * Debug mode: off
+   * Running on http://0.0.0.0:5000
+   ```
+
+### Access the Dashboard
+
+Open your web browser and navigate to:
+```
+http://localhost:5000
+```
+
+Or from another device on your local network:
+```
+http://[your-computer-ip]:5000
+```
+
+### Stopping the Server
+
+Press `Ctrl+C` in the terminal to stop the Flask server.
+
+---
+
+## 🔌 Hardware Integration
+
+### Microcontroller Setup
+
+The `hardware/` directory contains code for integrating physical sensors and actuators:
+
+- **`sht30_relay_control.py`**: Python script for SHT30 temperature/humidity sensor with relay control
+- **`SHT30Test.cpp`**: Arduino/C++ test code for SHT30 sensor
+- **`MicrocontrollerREADME.md`**: Detailed hardware setup instructions
+
+### Sensor Requirements
+- DHT22 or SHT30 Temperature/Humidity Sensor
+- Soil Moisture Sensor
+- Soil pH Sensor
+- Light Level Sensor (optional)
+
+### Actuator Requirements
+- Relay modules for switching 120V/240V devices
+- Fans for ventilation
+- Heating elements
+- Water valve/pump for irrigation
+
+For detailed hardware setup instructions, see [`hardware/MicrocontrollerREADME.md`](hardware/MicrocontrollerREADME.md).
+
+---
+
+## 📁 Project Structure
+
+```
+GreenHouse-Tender/
+├── app.py                      # Main Flask application
+├── weather_api.py              # Weather API integration module
+├── format_weather.py           # Weather data formatting utilities
+├── config.py                   # Configuration settings
+├── index.html                  # Main dashboard interface
+├── requirements.txt            # Python dependencies
+├── API.env                     # Environment variables (not tracked)
+├── README.md                   # This file
+├── hardware/                   # Hardware integration code
+│   ├── sht30_relay_control.py  # Sensor/relay control script
+│   ├── SHT30Test.cpp           # Arduino sensor test
+│   └── MicrocontrollerREADME.md # Hardware documentation
+├── templates/                  # HTML templates
+│   └── UI.html                 # Alternative dashboard
+└── archive/                    # Archived/legacy files
+    ├── index1.html
+    └── UI.html
+```
+
+---
+
+## 📡 API Documentation
+
+### Endpoints
+
+#### `GET /`
+Returns the main dashboard HTML page.
+
+**Response**: HTML document
+
+---
+
+#### `GET /weather`
+Fetches current weather data for the configured location.
+
+**Response**:
+```json
+{
+  "formatted": "Weather in Denver:\nTemperature: 65.57°F\n...",
+  "raw": {
+    "main": {
+      "temp": 291.52,
+      "feels_like": 290.91,
+      "humidity": 23
+    },
+    "weather": [{"main": "Clouds", "description": "overcast clouds"}],
+    "wind": {"speed": 1.34}
+  },
+  "timestamp": 1699824000
+}
+```
+
+**Error Response** (500):
+```json
+{
+  "error": "API_KEY not configured on server"
+}
+```
+
+**Error Response** (502):
+```json
+{
+  "error": "Unable to fetch weather data"
+}
+```
+
+---
+
+## 🔮 Future Enhancements
+
+### Short-Term Goals
+- [ ] Live sensor data integration from hardware
+- [ ] Historical data logging and visualization
+- [ ] Automated control system implementation
+- [ ] Email/SMS alert system
+- [ ] User authentication and multi-user support
+
+### Long-Term Goals
+- [ ] Machine learning for predictive climate control
+- [ ] Mobile application (iOS/Android)
+- [ ] Voice assistant integration (Alexa/Google Home)
+- [ ] Multi-greenhouse management
+- [ ] Cloud-based data storage and analytics
+- [ ] Solar panel and battery monitoring
+- [ ] Camera integration for plant monitoring
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**SecretEngineer**
+- GitHub: [@secretengineer](https://github.com/secretengineer)
+
+---
+
+## 🙏 Acknowledgments
+
+- [OpenWeatherMap](https://openweathermap.org/) for providing weather data API
+- [Flask](https://flask.palletsprojects.com/) for the excellent web framework
+- [Font Awesome](https://fontawesome.com/) for the icon library
+
+---
+
+<div align="center">
+  <p>Made with ❤️ for sustainable agriculture</p>
+  <p>⭐ Star this repository if you find it helpful!</p>
+</div> 
