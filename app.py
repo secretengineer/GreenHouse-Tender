@@ -7,36 +7,60 @@ from dotenv import load_dotenv
 from weather_api import get_weather
 from format_weather import format_weather_data
 
-# Load API key
+# Load API key from .env file for security
 load_dotenv('API.env')
 API_KEY = os.getenv('API_KEY')
 
-app = Flask(__name__, static_folder='.', template_folder='.')
+# Initialize Flask app
+# By default, Flask serves files from a 'static' folder at the '/static' URL prefix.
+app = Flask(__name__, template_folder='.')
 
+# --- Configuration ---
+# Default location for weather data (Denver, CO)
 LATITUDE = 39.73915
 LONGITUDE = -104.9847
 
+# --- Helper Functions ---
+def get_weather_data():
+    """
+    Fetches, formats, and timestamps weather data.
 
+    Returns:
+        dict: A dictionary containing formatted and raw weather data,
+              plus a Unix timestamp. Returns an error dictionary on failure.
+    """
+    if not API_KEY:
+        return {'error': 'API_KEY not configured on server', 'status': 500}
+
+    raw_data = get_weather(LATITUDE, LONGITUDE, API_KEY)
+    if isinstance(raw_data, dict) and 'error' in raw_data:
+        return {'error': raw_data['error'], 'status': 502}
+
+    formatted_data = format_weather_data(raw_data)
+    timestamp = int(time.time())
+
+    return {
+        'formatted': formatted_data,
+        'raw': raw_data,
+        'timestamp': timestamp
+    }
+
+# --- Routes ---
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    """Serves the main HTML page."""
+    return send_from_directory(app.template_folder, 'index.html')
 
 
 @app.route('/weather')
-def weather():
-    if not API_KEY:
-        return jsonify({'error': 'API_KEY not configured on server'}), 500
-
-    data = get_weather(LATITUDE, LONGITUDE, API_KEY)
-    if isinstance(data, dict) and data.get('error'):
-        return jsonify({'error': data.get('error')}), 502
-
-    formatted = format_weather_data(data)
-    # return integer epoch seconds so the client can reliably construct a Date
-    timestamp = int(time.time())
-    return jsonify({'formatted': formatted, 'raw': data, 'timestamp': timestamp})
+def weather_route():
+    """Provides weather data via a JSON API endpoint."""
+    weather_data = get_weather_data()
+    status_code = weather_data.pop('status', 200)
+    return jsonify(weather_data), status_code
 
 
 if __name__ == '__main__':
-    # Run on local network; change host/port as needed
+    # Run the app on the local network
+    # Note: In a production environment, use a proper WSGI server like Gunicorn
     app.run(host='0.0.0.0', port=5000)

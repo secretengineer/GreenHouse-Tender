@@ -1,68 +1,90 @@
-import json
-
 def format_weather_data(weather_data):
     """
-    Format the weather data into a user-friendly format.
-    
-    Args:
-        weather_data (dict): The raw weather data from the API.
-        
-    Returns:
-        str: A formatted string with relevant weather information.
-    """
+    Formats raw weather data from OpenWeatherMap into a readable string.
 
+    This function takes a dictionary of weather data, extracts key information,
+    converts temperatures from Kelvin to Fahrenheit, and returns a formatted,
+    multi-line string suitable for display.
+
+    Args:
+        weather_data (dict): A dictionary containing the raw weather data,
+                             typically from the OpenWeatherMap API.
+
+    Returns:
+        str: A user-friendly, formatted string with the most relevant
+             weather details. Returns an error message string if the
+             input data is invalid or missing keys.
+    """
+    # Check if the input dictionary contains an error message.
     if "error" in weather_data:
-        return str(weather_data["error"])
+        return f"API Error: {weather_data['error']}"
     
     try:
-        # Extract relevant information
+        # Safely extract location name; default if not available.
         city = weather_data.get('name', 'Unknown Location')
+
+        # --- Temperature Extraction and Conversion ---
+        # Extract temperatures in Kelvin from the 'main' data block.
         temp_k = weather_data['main']['temp']
         feels_like_k = weather_data['main']['feels_like']
         temp_min_k = weather_data['main']['temp_min']
         temp_max_k = weather_data['main']['temp_max']
         
-        # Convert temperatures from Kelvin to Fahrenheit
+        # Convert temperatures from Kelvin to Fahrenheit for readability.
+        # Formula: (K - 273.15) * 9/5 + 32
         temp_f = (temp_k - 273.15) * 9/5 + 32
         feels_like_f = (feels_like_k - 273.15) * 9/5 + 32
         temp_min_f = (temp_min_k - 273.15) * 9/5 + 32
         temp_max_f = (temp_max_k - 273.15) * 9/5 + 32
+
+        # --- Other Weather Details ---
+        # Extract weather condition, humidity, and wind speed.
         weather_description = weather_data['weather'][0]['description']
         humidity = weather_data['main']['humidity']
         wind_speed = weather_data['wind']['speed']
         
-        # Create a formatted string
+        # --- String Formatting ---
+        # Assemble the extracted and converted data into a multi-line string.
+        # The .capitalize() method is used for a clean 'Title Case' description.
         formatted_output = (
-            f"Weather in {city}:\n"
+            f"Location: {city}\n"
             f"Temperature: {temp_f:.1f}°F\n"
             f"Feels Like: {feels_like_f:.1f}°F\n"
-            f"Minimum Temperature: {temp_min_f:.1f}°F\n"
-            f"Maximum Temperature: {temp_max_f:.1f}°F\n"
+            f"Daily Low: {temp_min_f:.1f}°F\n"
+            f"Daily High: {temp_max_f:.1f}°F\n"
             f"Condition: {weather_description.capitalize()}\n"
             f"Humidity: {humidity}%\n"
-            f"Wind Speed: {wind_speed} m/s\n"
+            f"Wind Speed: {wind_speed:.1f} m/s"
         )
         
         return formatted_output
-    except KeyError as e:
-        return f"Error processing weather data: Missing key {str(e)}"
+    except (KeyError, IndexError) as e:
+        # Handle cases where expected data keys are missing from the API response.
+        # This prevents the application from crashing due to malformed data.
+        return f"Error: Malformed weather data received. Missing key: {e}"
 
+# --- Command-Line Test ---
 if __name__ == "__main__":
-    # Example usage
-    sample_weather_data = {
-        "name": "Glendale",
+    # This block allows for direct testing of the formatting function.
+    # To use, run `python format_weather.py` in the terminal.
+
+    # Example of a valid weather data dictionary.
+    sample_data = {
+        "name": "Denver",
         "main": {
-            "temp": 292.49,
-            "humidity": 19
+            "temp": 290.15, "feels_like": 289.15,
+            "temp_min": 288.15, "temp_max": 292.15,
+            "humidity": 45
         },
-        "weather": [
-            {
-                "description": "broken clouds"
-            }
-        ],
-        "wind": {
-            "speed": 1.54
-        }
+        "weather": [{"description": "clear sky"}],
+        "wind": {"speed": 3.5}
     }
     
-    print(format_weather_data(sample_weather_data))
+    # Example of an error dictionary.
+    error_data = {"error": "Invalid API key"}
+
+    print("--- Testing with valid data ---")
+    print(format_weather_data(sample_data))
+    print("\n" + "="*30 + "\n")
+    print("--- Testing with error data ---")
+    print(format_weather_data(error_data))

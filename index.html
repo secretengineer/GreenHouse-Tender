@@ -3,321 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mayfair Greenhouse Dashboard</title>
+    <title>GreenHouse Tender</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #1a1a1a;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 20px;
-            background: #333;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-        }
-        .header .time {
-            font-size: 1.2em;
-            flex: 1;
-            text-align: left;
-        }
-        .header .last-updated {
-            font-size: 1.2em;
-            flex: 1;
-            text-align: right;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            width: 100%;
-            max-width: 1200px;
-        }
-        .container {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5em;
-        }
-        h2 {
-            margin-bottom: 10px;
-            font-size: 1.5em;
-        }
-        pre {
-            text-align: left;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .weather {
-            border: 4px solid #4CAF50; /* Green */
-        }
-        .weather h2, .weather .fa {
-            color: #4CAF50;
-        }
-        .soil-temperature {
-            border: 4px solid #FF5722; /* Deep Orange */
-        }
-        .soil-temperature h2, .soil-temperature .fa {
-            color: #FF5722;
-        }
-        .humidity {
-            border: 4px solid #03A9F4; /* Light Blue */
-        }
-        .humidity h2, .humidity .fa {
-            color: #03A9F4;
-        }
-        .fan-speed {
-            border: 4px solid #9C27B0; /* Purple */
-        }
-        .fan-speed h2, .fan-speed .fa {
-            color: #9C27B0;
-        }
-        .interior-air-temperature {
-            border: 4px solid #FFC107; /* Amber */
-        }
-        .interior-air-temperature h2, .interior-air-temperature .fa {
-            color: #FFC107;
-        }
-        .vent-status {
-            border: 4px solid #8BC34A; /* Light Green */
-        }
-        .vent-status h2, .vent-status .fa {
-            color: #8BC34A;
-        }
-        .water-system {
-            border: 4px solid #00BCD4; /* Cyan */
-        }
-        .water-system h2, .water-system .fa {
-            color: #00BCD4;
-        }
-        .soil-ph {
-            border: 4px solid #E91E63; /* Pink */
-        }
-        .soil-ph h2, .soil-ph .fa {
-            color: #E91E63;
-        }
-        .notifications {
-            border: 4px solid #FFEB3B; /* Yellow */
-        }
-        .notifications h2, .notifications .fa {
-            color: #FFEB3B;
-        }
-        .fa {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        /* Refresh button styles and animation */
-        .refresh-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(180deg,#2e7d32,#1b5e20);
-            color: #ffffff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: transform 150ms ease, opacity 150ms ease;
-        }
-        .refresh-btn:disabled {
-            opacity: 0.6;
-            cursor: default;
-        }
-        .refresh-btn .fa {
-            transition: transform 300ms linear;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .refresh-btn.loading .fa {
-            animation: spin 0.8s linear infinite;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="header">
-        <div class="time" id="current-time"></div>
-        <div class="last-updated" id="last-updated"></div>
+        <div class="time" id="current-time">Loading current time...</div>
+        <div class="last-updated" id="last-updated">Loading last updated time...</div>
     </div>
     <div class="grid-container">
         <div class="container weather">
             <i class="fa fa-cloud-sun"></i>
-            <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-                <h2 style="margin:0;">Mayfair Weather</h2>
-                <button id="refresh-weather" class="refresh-btn" title="Refresh weather now">
-                    <i class="fa fa-sync"></i>
-                    <span style="margin-left:6px;">Refresh</span>
-                </button>
-            </div>
-            <div id="weather-data"><pre>Current weather in Denver:
-Temperature: 65.57&deg;F
-Feels Like: 62.91&deg;F
-Minimum Temperature: 63.45&deg;F
-Maximum Temperature: 68.92&deg;F
-Condition: Overcast clouds
-Humidity: 23%
-Wind Speed: 1.34 m/s
-</pre></div> <!-- Ensure this placeholder exists -->
+            <h2>External Weather</h2>
+            <div id="weather-data"><pre>Loading weather data...</pre></div>
+            <button id="refresh-weather" class="refresh-btn" title="Refresh weather now">
+                <i class="fa fa-sync"></i>
+                <span>Refresh</span>
+            </button>
         </div>
 
         <div class="container soil-temperature">
             <i class="fa fa-thermometer-half"></i>
             <h2>Soil Temperature</h2>
-            <div id="soil-temperature">
-                <pre>Soil Temperature: 55.4&deg;F</pre>
-            </div>
+            <div id="soil-temperature"><pre>55.4°F</pre></div>
         </div>
 
         <div class="container humidity">
             <i class="fa fa-tint"></i>
             <h2>Humidity</h2>
-            <div id="humidity">
-                <pre>Humidity: 60%</pre>
-            </div>
+            <div id="humidity"><pre>60%</pre></div>
         </div>
 
         <div class="container fan-speed">
             <i class="fa fa-fan"></i>
             <h2>Fan Speed</h2>
-            <div id="fan-speed">
-                <pre>Fan Speed: 1200 RPM</pre>
-            </div>
+            <div id="fan-speed"><pre>1200 RPM</pre></div>
         </div>
 
         <div class="container interior-air-temperature">
             <i class="fa fa-temperature-high"></i>
-            <h2>Interior Air Temperature</h2>
-            <div id="interior-air-temperature">
-                <pre>Interior Air Temperature: 72.5&deg;F</pre>
-            </div>
+            <h2>Interior Air Temp</h2>
+            <div id="interior-air-temperature"><pre>72.5°F</pre></div>
         </div>
 
         <div class="container vent-status">
             <i class="fa fa-wind"></i>
             <h2>Vent Status</h2>
-            <div id="vent-status">
-                <pre>Vent Status: Open</pre>
-            </div>
+            <div id="vent-status"><pre>Open</pre></div>
         </div>
 
         <div class="container water-system">
             <i class="fa fa-water"></i>
             <h2>Water System</h2>
-            <div id="water-system">
-                <pre>Water System: Active</pre>
-            </div>
+            <div id="water-system"><pre>Active</pre></div>
         </div>
 
         <div class="container soil-ph">
             <i class="fa fa-leaf"></i>
-            <h2>Soil PH</h2>
-            <div id="soil-ph">
-                <pre>Soil PH: 6.8</pre>
-            </div>
+            <h2>Soil pH</h2>
+            <div id="soil-ph"><pre>6.8</pre></div>
         </div>
 
         <div class="container notifications">
             <i class="fa fa-bell"></i>
             <h2>Notifications</h2>
-            <div id="notifications">
-                <pre>No new notifications</pre>
-            </div>
+            <div id="notifications"><pre>No new notifications</pre></div>
         </div>
     </div>
-    <script>
-        // Function to update the current time
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('current-time').textContent = `Current Time: ${timeString}`;
-        }
-
-        // Function to set the last updated time (client-side fallback)
-        function setLastUpdated(ts) {
-            let timeString;
-            if (ts) {
-                const d = new Date(ts * 1000);
-                timeString = d.toLocaleString();
-            } else {
-                const now = new Date();
-                timeString = now.toLocaleTimeString();
-            }
-            document.getElementById('last-updated').textContent = `Last Updated: ${timeString}`;
-        }
-
-        // Function to fetch and update weather data
-        async function updateWeatherData() {
-            try {
-                const response = await fetch('http://127.0.0.1:5000/weather');
-                const data = await response.json();
-                document.getElementById('weather-data').innerHTML = `<pre>${data.weather}</pre>`;
-                setLastUpdated();
-            } catch (error) {
-                console.error('Error fetching weather data:', error);
-            }
-        }
-
-        // Update the current time every second
-        setInterval(updateTime, 1000);
-
-        // Fetch weather from the Flask server and update only the weather section
-        async function refreshWeather() {
-                const btn = document.getElementById('refresh-weather');
-                try {
-                    if (btn) { btn.disabled = true; btn.classList.add('loading'); btn.setAttribute('aria-busy','true'); }
-
-                    const res = await fetch('/weather', { cache: 'no-store' });
-                    if (!res.ok) {
-                        console.error('Failed to fetch /weather', res.status);
-                        document.getElementById('weather-data').innerHTML = `<pre>Error fetching weather: ${res.status}</pre>`;
-                        return;
-                    }
-                    const data = await res.json();
-                    if (data.error) {
-                        document.getElementById('weather-data').innerHTML = `<pre>Error: ${data.error}</pre>`;
-                        return;
-                    }
-
-                    // Insert the formatted content (server returns safe HTML-like string)
-                    const formatted = data.formatted || '';
-                    document.getElementById('weather-data').innerHTML = `<pre>${formatted}</pre>`;
-
-                    // Update last-updated using server timestamp if provided
-                    if (data.timestamp) setLastUpdated(data.timestamp);
-                } catch (err) {
-                    console.error('Error fetching weather:', err);
-                    document.getElementById('weather-data').innerHTML = `<pre>Error loading weather: ${String(err)}</pre>`;
-                } finally {
-                    if (btn) { btn.disabled = false; btn.classList.remove('loading'); btn.removeAttribute('aria-busy'); }
-                }
-        }
-
-        // Initial UI updates and weather fetch
-        window.addEventListener('load', () => {
-            updateTime();
-            setLastUpdated();
-            refreshWeather();
-            // Refresh weather every 5 minutes while page is open
-            setInterval(refreshWeather, 5 * 60 * 1000);
-        });
-    </script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
