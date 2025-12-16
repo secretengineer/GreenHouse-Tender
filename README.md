@@ -44,12 +44,13 @@ The application features a responsive web dashboard that displays:
 ## ✨ Features
 
 ### Current Features
-- **Real-Time Weather Monitoring**: Integration with OpenWeatherMap API for location-specific weather data
-- **Responsive Dashboard**: Modern, mobile-friendly web interface with live data updates
-- **Manual Weather Refresh**: On-demand weather data updates via refresh button
-- **Sensor Data Display**: Visual representation of multiple greenhouse parameters
-- **Automatic Updates**: Weather data refreshes every 5 minutes
-- **RESTful API**: Flask-based backend for data management
+- **Real-Time Weather Monitoring**: Integration with OpenWeatherMap API for location-specific weather data.
+- **Redesigned Responsive Dashboard**: Features a modern, minimalist, and mobile-first dark theme for an improved user experience.
+- **Accurate Timestamps**: Displays both the current time and a reliable "last updated" timestamp for weather data, provided by the server.
+- **Manual Weather Refresh**: On-demand weather data updates via a refresh button.
+- **Automatic Updates**: Weather data automatically refreshes every 5 minutes.
+- **RESTful API**: A clean, Flask-based backend for data management and frontend communication.
+- **Modular Codebase**: Refactored frontend (HTML/CSS/JS) and backend (Python) code for enhanced maintainability and readability.
 
 ### Planned Features
 - **Automated Climate Control**: Integration with actuators for heating, cooling, and ventilation
@@ -283,22 +284,17 @@ For detailed hardware setup instructions, see [`hardware/MicrocontrollerREADME.m
 ```
 GreenHouse-Tender/
 ├── app.py                      # Main Flask application
-├── weather_api.py              # Weather API integration module
-├── format_weather.py           # Weather data formatting utilities
-├── config.py                   # Configuration settings
-├── index.html                  # Main dashboard interface
-├── requirements.txt            # Python dependencies
-├── API.env                     # Environment variables (not tracked)
+├── weather_api.py              # Handles OpenWeatherMap API requests
+├── format_weather.py           # Utilities for formatting weather data
+├── index.html                  # Main dashboard HTML file
+├── requirements.txt            # Python dependencies for the project
+├── static/                     # Contains all static assets
+│   ├── style.css               # Main stylesheet for the dashboard
+│   └── script.js               # JavaScript for dashboard interactivity
+├── API.env                     # Environment variables (Git-ignored)
 ├── README.md                   # This file
-├── hardware/                   # Hardware integration code
-│   ├── sht30_relay_control.py  # Sensor/relay control script
-│   ├── SHT30Test.cpp           # Arduino sensor test
-│   └── MicrocontrollerREADME.md # Hardware documentation
-├── templates/                  # HTML templates
-│   └── UI.html                 # Alternative dashboard
-└── archive/                    # Archived/legacy files
-    ├── index1.html
-    └── UI.html
+└── hardware/                   # Code for hardware integration (e.g., Raspberry Pi)
+    ├── ...
 ```
 
 ---
@@ -320,15 +316,13 @@ Fetches current weather data for the configured location.
 **Response**:
 ```json
 {
-  "formatted": "Weather in Denver:\nTemperature: 65.57°F\n...",
+  "formatted": "Location: Denver\nTemperature: 68.5°F\n...",
   "raw": {
     "main": {
-      "temp": 291.52,
-      "feels_like": 290.91,
-      "humidity": 23
+      "temp": 293.45,
+      ...
     },
-    "weather": [{"main": "Clouds", "description": "overcast clouds"}],
-    "wind": {"speed": 1.34}
+    ...
   },
   "timestamp": 1699824000
 }
@@ -406,4 +400,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <div align="center">
   <p>Made with ❤️ for sustainable agriculture</p>
   <p>⭐ Star this repository if you find it helpful!</p>
-</div> 
+</div>
